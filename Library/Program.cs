@@ -1,6 +1,5 @@
 ﻿using Library.Conroller;
 
-
 // Display menu options and handle user input
 while (true)
 {
