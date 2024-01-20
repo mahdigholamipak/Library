@@ -1,4 +1,10 @@
-﻿using Library.Conroller;
+﻿using Library.Services;
+using Library.Data;
+using Library.Models;
+
+//pass your connection string to LibraryContext constructor method
+LibraryContext DbContext = new LibraryContext("Server=Mahdi;Database=Library;Integrated Security=True;");
+LibraryManager libraryManager = new LibraryManager(DbContext);
 
 // Display menu options and handle user input
 while (true)
@@ -16,22 +22,44 @@ while (true)
     Console.Write("Enter your choice: ");
     string choice = Console.ReadLine();
 
+    Console.Clear();
     switch (choice)
     {
         case "1":
-            LibraryManager.AddBook();
-            break;
+           {               
+                Book addingBook = new Book();
+                BookService.ReadBookInfo(ref addingBook);
+                libraryManager.AddBook(addingBook);
+                break;
+            }
         case "2":
-            LibraryManager.UpdateBook();
-            break;
+            {
+                libraryManager.ViewAllBooks();
+                int Id = BookService.ReadId();
+                Book updatedBook = new Book();
+                updatedBook=libraryManager.getBookById(Id);
+                BookService.PrintBookInfo(updatedBook);
+                BookService.ReadBookInfo(ref updatedBook);
+                libraryManager.UpdateBook(updatedBook);
+                break;
+            }
+            
         case "3":
-            LibraryManager.RemoveBook();
-            break;
+            {
+                libraryManager.ViewAllBooks();
+                Book removingBook = new Book();
+                int Id = BookService.ReadId();
+                removingBook=libraryManager.getBookById(Id);
+                libraryManager.RemoveBook(removingBook);
+                break;
+            }
         case "4":
-            LibraryManager.ViewAllBooks();
+            libraryManager.ViewAllBooks();
             break;
         case "5":
-            LibraryManager.SearchBooks();
+            Console.WriteLine("Enter a phrase to search it in Library: ");
+            string searchKey = Console.ReadLine();
+            libraryManager.SearchBooks(searchKey);
             break;
         case "6":
             Environment.Exit(0);
@@ -39,7 +67,9 @@ while (true)
         default:
             Console.WriteLine("Invalid choice. Please try again.");
             break;
+
     }
+
 
     Console.WriteLine("Press any key to continue...");
     Console.ReadKey();
