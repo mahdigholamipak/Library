@@ -47,7 +47,7 @@ namespace Library.Services
         }
         public Book getBookById(int Id)
         {
-            Book book = (from bookElement in _dbContext.books where bookElement.Id == Id select bookElement).First();
+            Book book = _dbContext.books.Find(Id);
             return book;
         }
     }
